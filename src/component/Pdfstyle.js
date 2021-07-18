@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
-import { Viewer } from '@react-pdf-viewer/core'; // install this library
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; // install this library
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import { Worker } from '@react-pdf-viewer/core';
 import "./index.css";
-export const Pdfstyle = () => {
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
-  // Create new plugin instance
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+export const Pdfstyle = () => {
+  const [numPages, setNumPages] = useState(null);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
 
   // for onchange event
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFileError, setPdfFileError] = useState('');
-
+  const [page, setpage] = useState(1);
   // for submit event
   const [viewPdf, setViewPdf] = useState(null);
 
@@ -69,10 +70,23 @@ export const Pdfstyle = () => {
       <br></br>
       <h4>View PDF</h4>
       <div className='pdf-container'>
-        {viewPdf && <><Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
-          <Viewer fileUrl={viewPdf}
-            plugins={[defaultLayoutPluginInstance]} />
-        </Worker></>}
+        {viewPdf && <>
+          <Document
+            workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js"
+            file={viewPdf}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page pageNumber={page} />
+          </Document>
+          <div style={{ marginLeft: 10 }}>
+            <p>Page {page} of {numPages}</p>
+            {
+              page < numPages ? <button className='btn btn-success btn' onClick={() => {
+                if (page > numPages) { setpage(1) } setpage(page + 1)
+              }}>next page</button> : <button className='btn btn-success btn' onClick={() => { setpage(1) }}>Go to page 1</button>
+            }
+          </div>
+        </>}
         {!viewPdf && <>No pdf file selected</>}
       </div>
 
