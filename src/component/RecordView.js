@@ -7,7 +7,7 @@ const RecordView = () => {
     stopRecording,
     mediaBlobUrl,
   } = useReactMediaRecorder({ video: true });
-  console.log(status);
+  console.log(mediaBlobUrl);
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems:'center', justifyContent:'center',marginTop:5}}>

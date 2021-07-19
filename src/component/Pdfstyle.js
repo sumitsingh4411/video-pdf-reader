@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import "./index.css";
 import { Document, Page, pdfjs } from 'react-pdf';
 
 export const Pdfstyle = () => {
@@ -14,7 +11,6 @@ export const Pdfstyle = () => {
     setNumPages(numPages);
   }
 
-  // for onchange event
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFileError, setPdfFileError] = useState('');
   const [page, setpage] = useState(1);
@@ -64,7 +60,13 @@ export const Pdfstyle = () => {
         <input type="file" className='form-control'
           required onChange={handlePdfFileChange}
         />
-        {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
+        {pdfFileError && <div style={
+          {
+            width: '100%',
+            color: 'red',
+            fontSize: 14,
+            fontWeight: 600,
+          }}>{pdfFileError}</div>}
         <br></br>
         <button type="submit" className='btn btn-success btn-lg'>
           UPLOAD
@@ -72,10 +74,17 @@ export const Pdfstyle = () => {
       </form>
       <br></br>
       <h4>View PDF</h4>
-      <div className='pdf-container'>
+      <div className='pdf-container' style={{
+        width: '60%',
+        height: 800,
+        backgroundColor: '#e4e4e4',
+        overflowY: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
         {viewPdf && <>
           <Document
-            workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js"
             file={viewPdf}
             onLoadSuccess={onDocumentLoadSuccess}
           >
@@ -93,7 +102,7 @@ export const Pdfstyle = () => {
         {!viewPdf && <>No pdf file selected</>}
       </div>
 
-    </div>
+    </div >
   )
 }
 
